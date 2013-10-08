@@ -40,13 +40,12 @@
         CGFloat heightFactor = size.width / imageSize.height;
         
         if (widthFactor > heightFactor)
-            scaleFactor = widthFactor; // scale to fit height
+            scaleFactor = widthFactor;
         else
-            scaleFactor = heightFactor; // scale to fit width
+            scaleFactor = heightFactor;
         scaledWidth  = imageSize.width * scaleFactor;
         scaledHeight = imageSize.height * scaleFactor;
         
-        // center the image
         if (widthFactor > heightFactor)
         {
             thumbnailPoint.y = (size.height - scaledHeight) * 0.5;
@@ -58,7 +57,7 @@
             }
     }
     
-    UIGraphicsBeginImageContext(size); // this will crop
+    UIGraphicsBeginImageContext(size);
     
     CGRect thumbnailRect = CGRectZero;
     thumbnailRect.origin = thumbnailPoint;
@@ -71,7 +70,6 @@
     if(newImage == nil)
         NSLog(@"could not scale image");
     
-    //pop the context to get back to the default
     UIGraphicsEndImageContext();
     return newImage;
 }

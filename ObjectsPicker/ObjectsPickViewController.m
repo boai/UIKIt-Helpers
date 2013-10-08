@@ -8,10 +8,6 @@
 
 #import "ObjectsPickViewController.h"
 
-@interface ObjectsPickViewController ()
-
-@end
-
 @implementation ObjectsPickViewController
 
 -(void)initialize

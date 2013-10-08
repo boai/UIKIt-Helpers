@@ -6,8 +6,6 @@
 //  Copyright (c) 2012 Macsoftex. All rights reserved.
 //
 
-
-
 @interface UIColor (UserColors)
 
 +(UIColor*)selectedColor;

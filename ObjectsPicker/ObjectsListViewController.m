@@ -8,10 +8,6 @@
 
 #import "ObjectsListViewController.h"
 
-@interface ObjectsListViewController ()
-
-@end
-
 @implementation ObjectsListViewController
 
 - (void)didReceiveMemoryWarning

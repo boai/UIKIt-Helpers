@@ -10,15 +10,6 @@
 
 @implementation UICloseButton
 
-- (id)initWithFrame:(CGRect)frame
-{
-    self = [super initWithFrame:frame];
-    if (self) {
-        // Initialization code
-    }
-    return self;
-}
-
 - (void)drawRect:(CGRect)rect {
 	float radius = MIN(rect.size.width, rect.size.height)/2;
 	float hWidth = CGRectGetMidX(rect);
