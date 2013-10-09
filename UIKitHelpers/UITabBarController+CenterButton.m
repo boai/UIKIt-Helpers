@@ -20,17 +20,17 @@
     else
         size = button.frame.size;
     
-    button.frame = CGRectMake(0.0, 0.0, size.width, size.height);
+    CGRect buttonFrame = CGRectMake(0.0, 0.0, size.width, size.height);
     
-    CGFloat heightDifference = size.height - self.tabBar.frame.size.height;
+    CGFloat heightDifference = size.height - self.tabBar.bounds.size.height;
     if (heightDifference < 0)
-        button.center = self.tabBar.center;
+        buttonFrame.origin.y = (self.tabBar.bounds.size.height - buttonFrame.size.height)*0.5;
     else
-    {
-        CGPoint center = self.tabBar.center;
-        center.y = center.y - heightDifference/2.0;
-        button.center = center;
-    }
+        buttonFrame.origin.y = -heightDifference;
+    
+    buttonFrame.origin.x = (self.tabBar.bounds.size.width - buttonFrame.size.width) * 0.5;
+    
+    button.frame = buttonFrame;
     
     [self.tabBar addSubview:button];
 }
