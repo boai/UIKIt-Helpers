@@ -8,13 +8,17 @@
 
 #import <UIKit/UIKit.h>
 
-@interface BlockAlertView : NSObject <UIAlertViewDelegate>
-
-@property (nonatomic, strong, readonly) UIAlertView *alertView;
+@interface BlockAlertView : NSObject <UIAlertViewDelegate,UITextFieldDelegate>
 
 -(id)initWithTitle:(NSString*)title message:(NSString*)message;
 -(void)addButton:(NSString*)title withBlock:(void (^)(BlockAlertView* alert))block;
 
 -(void)show;
+
+-(UITextField*)textFieldAtIndex:(int)index;
+
+@property (nonatomic) UIAlertViewStyle style;
+@property (nonatomic) int cancelButtonIndex;
+@property (nonatomic) int returnButton;
 
 @end

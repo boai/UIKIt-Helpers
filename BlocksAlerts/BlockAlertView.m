@@ -17,8 +17,6 @@
     id context;
 }
 
-@synthesize alertView = _alertView;
-
 -(id)initWithTitle:(NSString*)title message:(NSString*)message
 {
     if (self = [self init])
@@ -30,6 +28,8 @@
                                       otherButtonTitles:nil];
         
         buttonsBlocks = [NSMutableArray array];
+        
+        self.returnButton = -1;
     }
     return self;
 }
@@ -50,19 +50,85 @@
 {
     context = self;
     
+    if (_alertView.alertViewStyle!=UIAlertViewStyleDefault && _alertView.alertViewStyle!=UIAlertViewStylePlainTextInput)
+    {
+        [_alertView textFieldAtIndex:0].delegate = self;
+        [_alertView textFieldAtIndex:1].delegate = self;
+    }
+    else if (_alertView.alertViewStyle == UIAlertViewStylePlainTextInput)
+    {
+        [_alertView textFieldAtIndex:0].delegate = self;
+    }
+    
     [_alertView show];
+}
+
+-(void)dissmissed
+{
+    context = nil;
+    _alertView = nil;
+}
+
+-(void)didDismissWithButton:(int)button
+{
+    void(^block)(BlockAlertView*) = buttonsBlocks[button];
+    block(self);
+    
+    [self dissmissed];
+}
+
+#pragma mark - Properties
+
+-(void)setCancelButtonIndex:(int)cancelButtonIndex
+{
+    _alertView.cancelButtonIndex = cancelButtonIndex;
+}
+
+-(int)cancelButtonIndex
+{
+    return _alertView.cancelButtonIndex;
+}
+
+-(UITextField*)textFieldAtIndex:(int)index
+{
+    return [_alertView textFieldAtIndex:index];
+}
+
+-(void)setStyle:(UIAlertViewStyle)style
+{
+    _alertView.alertViewStyle = style;
+}
+
+-(UIAlertViewStyle)style
+{
+    return _alertView.alertViewStyle;
 }
 
 #pragma mark - UIAlertViewDelegate
 
--(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+- (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex
 {
-    void(^block)(BlockAlertView*) = [buttonsBlocks objectAtIndex:buttonIndex];
+    [self didDismissWithButton:buttonIndex];
+}
+
+#pragma mark - UITextFieldDelegate
+
+-(BOOL)textFieldShouldReturn:(UITextField *)textField
+{
+    if (textField == [_alertView textFieldAtIndex:0])
+    {
+        if (_alertView.alertViewStyle==UIAlertViewStyleLoginAndPasswordInput)
+        {
+            [[_alertView textFieldAtIndex:1] becomeFirstResponder];
+            return YES;
+        }
+    }
     
-    block(self);
+    if (self.returnButton<0) return NO;
     
-    context = nil;
-    _alertView = nil;
+    [_alertView dismissWithClickedButtonIndex:self.returnButton animated:YES];
+    
+    return YES;
 }
 
 @end
