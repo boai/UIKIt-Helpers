@@ -95,5 +95,20 @@
     return _actionSheet.cancelButtonIndex;
 }
 
+-(void)setDestructiveButtonIndex:(int)destructiveButtonIndex
+{
+    _actionSheet.destructiveButtonIndex = destructiveButtonIndex;
+}
+
+-(int)destructiveButtonIndex
+{
+    return _actionSheet.destructiveButtonIndex;
+}
+
+-(int)numberOfButtons
+{
+    return _actionSheet.numberOfButtons;
+}
+
 
 @end

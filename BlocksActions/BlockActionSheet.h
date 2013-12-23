@@ -20,5 +20,7 @@
 -(void)showFromRect:(CGRect)rect inView:(UIView *)view animated:(BOOL)animated;
 
 @property (nonatomic) int cancelButtonIndex;
+@property (nonatomic) int destructiveButtonIndex;
+@property (nonatomic,readonly) int numberOfButtons;
 
 @end
