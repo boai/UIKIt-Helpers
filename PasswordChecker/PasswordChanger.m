@@ -50,22 +50,22 @@
 -(void)passwordAlertView:(NSString*)title okBlock:(void(^)(BlockAlertView* alert))okBlock
 {
     BlockAlertView *passwordAlertView = [[BlockAlertView alloc] initWithTitle:title message:nil];
-    passwordAlertView.alertView.alertViewStyle = UIAlertViewStyleSecureTextInput;
+    passwordAlertView.style = UIAlertViewStyleSecureTextInput;
     [passwordAlertView addButton:NSLocalizedString(@"Cancel", @"") withBlock:^(BlockAlertView *alert) {
         completeBlock(nil,YES);
         context = nil;
     }];
     [passwordAlertView addButton:NSLocalizedString(@"Ok", @"") withBlock:okBlock];
-    passwordAlertView.alertView.cancelButtonIndex = 0;
+    passwordAlertView.cancelButtonIndex = 0;
     [passwordAlertView show];
 }
 
 -(void)enterNewPassword
 {
     [self passwordAlertView:NSLocalizedString(@"Enter password", @"") okBlock:^(BlockAlertView *alert) {
-        NSString *password = [alert.alertView textFieldAtIndex:0].text;
+        NSString *password = [alert textFieldAtIndex:0].text;
         [self passwordAlertView:NSLocalizedString(@"Confirm password", @"") okBlock:^(BlockAlertView *alert) {
-            NSString *confirmPassword = [alert.alertView textFieldAtIndex:0].text;
+            NSString *confirmPassword = [alert textFieldAtIndex:0].text;
             if ([password isEqualToString:confirmPassword])
             {
                 completeBlock(password,NO);

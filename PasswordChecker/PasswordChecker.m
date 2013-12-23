@@ -29,13 +29,13 @@
     context = self;
     
     BlockAlertView *alertView = [[BlockAlertView alloc] initWithTitle:self.title message:nil];
-    alertView.alertView.alertViewStyle = UIAlertViewStyleSecureTextInput;
+    alertView.style = UIAlertViewStyleSecureTextInput;
     [alertView addButton:NSLocalizedString(@"Cancel", @"") withBlock:^(BlockAlertView *alert) {
         checkerHandler(nil,YES);
         context = nil;
     }];
     [alertView addButton:NSLocalizedString(@"Ok", @"") withBlock:^(BlockAlertView *alert) {
-        if (!checkerHandler([alert.alertView textFieldAtIndex:0].text,NO))
+        if (!checkerHandler([alert textFieldAtIndex:0].text,NO))
         {
             BlockAlertView *wrongPasswordAlert = [[BlockAlertView alloc] initWithTitle:NSLocalizedString(@"Wrong password", @"")
                                                                                message:nil];
@@ -47,7 +47,7 @@
         else
             context = nil;
     }];
-    alertView.alertView.cancelButtonIndex = 0;
+    alertView.cancelButtonIndex = 0;
     [alertView show];
 }
 
