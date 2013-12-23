@@ -17,9 +17,6 @@
     id context;
 }
 
-@synthesize actionSheet = _actionSheet;
-
-
 -(void)addButton:(NSString*)title withBlock:(void (^)(BlockActionSheet* alert))block
 {
     [_actionSheet addButtonWithTitle:title];
@@ -84,6 +81,18 @@
     
     context = nil;
     _actionSheet = nil;
+}
+
+#pragma mark - Properties
+
+-(void)setCancelButtonIndex:(int)cancelButtonIndex
+{
+    _actionSheet.cancelButtonIndex = cancelButtonIndex;
+}
+
+-(int)cancelButtonIndex
+{
+    return _actionSheet.cancelButtonIndex;
 }
 
 

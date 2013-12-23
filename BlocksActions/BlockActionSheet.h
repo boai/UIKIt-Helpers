@@ -10,8 +10,6 @@
 
 @interface BlockActionSheet : NSObject <UIActionSheetDelegate>
 
-@property (nonatomic, strong, readonly) UIActionSheet *actionSheet;
-
 -(id)initWithTitle:(NSString*)title;
 -(void)addButton:(NSString*)title withBlock:(void (^)(BlockActionSheet* alert))block;
 
@@ -20,5 +18,7 @@
 -(void)showInView:(UIView*)view;
 -(void)showFromBarButtonItem:(UIBarButtonItem*)barButton animated:(BOOL)animated;
 -(void)showFromRect:(CGRect)rect inView:(UIView *)view animated:(BOOL)animated;
+
+@property (nonatomic) int cancelButtonIndex;
 
 @end
