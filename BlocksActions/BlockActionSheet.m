@@ -85,27 +85,27 @@
 
 #pragma mark - Properties
 
--(void)setCancelButtonIndex:(int)cancelButtonIndex
+-(void)setCancelButtonIndex:(NSInteger)cancelButtonIndex
 {
     _actionSheet.cancelButtonIndex = cancelButtonIndex;
 }
 
--(int)cancelButtonIndex
+-(NSInteger)cancelButtonIndex
 {
     return _actionSheet.cancelButtonIndex;
 }
 
--(void)setDestructiveButtonIndex:(int)destructiveButtonIndex
+-(void)setDestructiveButtonIndex:(NSInteger)destructiveButtonIndex
 {
     _actionSheet.destructiveButtonIndex = destructiveButtonIndex;
 }
 
--(int)destructiveButtonIndex
+-(NSInteger)destructiveButtonIndex
 {
     return _actionSheet.destructiveButtonIndex;
 }
 
--(int)numberOfButtons
+-(NSInteger)numberOfButtons
 {
     return _actionSheet.numberOfButtons;
 }

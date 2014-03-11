@@ -19,8 +19,8 @@
 -(void)showFromBarButtonItem:(UIBarButtonItem*)barButton animated:(BOOL)animated;
 -(void)showFromRect:(CGRect)rect inView:(UIView *)view animated:(BOOL)animated;
 
-@property (nonatomic) int cancelButtonIndex;
-@property (nonatomic) int destructiveButtonIndex;
-@property (nonatomic,readonly) int numberOfButtons;
+@property (nonatomic) NSInteger cancelButtonIndex;
+@property (nonatomic) NSInteger destructiveButtonIndex;
+@property (nonatomic,readonly) NSInteger numberOfButtons;
 
 @end

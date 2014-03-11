@@ -49,9 +49,9 @@
     // Dispose of any resources that can be recreated.
 }
 
--(void)setSelectedIndex:(int)selectedIndex
+-(void)setSelectedIndex:(NSInteger)selectedIndex
 {
-    int prevIndex = self.selectedIndex;
+    NSInteger prevIndex = self.selectedIndex;
     _selectedIndex = selectedIndex;
     
     if (prevIndex != self.selectedIndex)

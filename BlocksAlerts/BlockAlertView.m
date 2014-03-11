@@ -69,7 +69,7 @@
     _alertView = nil;
 }
 
--(void)didDismissWithButton:(int)button
+-(void)didDismissWithButton:(NSInteger)button
 {
     void(^block)(BlockAlertView*) = buttonsBlocks[button];
     block(self);
@@ -79,12 +79,12 @@
 
 #pragma mark - Properties
 
--(void)setCancelButtonIndex:(int)cancelButtonIndex
+-(void)setCancelButtonIndex:(NSInteger)cancelButtonIndex
 {
     _alertView.cancelButtonIndex = cancelButtonIndex;
 }
 
--(int)cancelButtonIndex
+-(NSInteger)cancelButtonIndex
 {
     return _alertView.cancelButtonIndex;
 }

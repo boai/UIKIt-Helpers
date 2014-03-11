@@ -26,30 +26,30 @@
     [self.delegate timePickViewDidEnable:self];
 }
 
--(void)setHours:(int)hours
+-(void)setHours:(NSInteger)hours
 {
     _hours = hours;
     [picker selectRow:self.hours inComponent:0 animated:NO];
 }
 
--(void)setMinutes:(int)minutes
+-(void)setMinutes:(NSInteger)minutes
 {
     _minutes = minutes;
     [picker selectRow:self.minutes inComponent:1 animated:NO];
 }
 
--(void)setSeconds:(int)seconds
+-(void)setSeconds:(NSInteger)seconds
 {
     _seconds = seconds;
     [picker selectRow:self.seconds inComponent:2 animated:NO];
 }
 
--(void)setInterval:(float)interval
+-(void)setInterval:(CGFloat)interval
 {
-    int hours = (int)floor(interval / 3600.0);
+    NSInteger hours = (NSInteger)floor(interval / 3600.0);
     interval-=(hours*3600);
     
-    int minutes = (int)floor(interval / 60.0);
+    NSInteger minutes = (NSInteger)floor(interval / 60.0);
     interval-=(minutes*60);
     
     self.hours = hours;
@@ -59,19 +59,19 @@
 
 #pragma mark - 
 
--(int)numberOfComponentsInPickerView:(UIPickerView *)pickerView
+-(NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView
 {
     return 3;
 }
 
--(int)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component
+-(NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component
 {
     return 61;
 }
 
 -(NSString*)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component
 {
-    return [NSString stringWithFormat:@"%d",row];
+    return [NSString stringWithFormat:@"%ld",(long)row];
 }
 
 -(void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component

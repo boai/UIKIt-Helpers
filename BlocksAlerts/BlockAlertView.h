@@ -18,7 +18,7 @@
 -(UITextField*)textFieldAtIndex:(int)index;
 
 @property (nonatomic) UIAlertViewStyle style;
-@property (nonatomic) int cancelButtonIndex;
-@property (nonatomic) int returnButton;
+@property (nonatomic) NSInteger cancelButtonIndex;
+@property (nonatomic) NSInteger returnButton;
 
 @end

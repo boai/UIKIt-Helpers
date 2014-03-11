@@ -17,7 +17,7 @@
 @interface ObjectsPickViewController : ObjectsListViewController
 
 @property (nonatomic,copy) UITableViewCell* (^selectedCellMaker)(UITableView *tableView, NSIndexPath *indexPath, id object);
-@property (nonatomic) int selectedIndex;
+@property (nonatomic) NSInteger selectedIndex;
 
 @property (nonatomic,assign) id<ObjectsPickViewControllerDelegate> pickDelegate;
 

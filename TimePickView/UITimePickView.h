@@ -16,11 +16,11 @@
 
 @interface UITimePickView : UIView <UIPickerViewDataSource, UIPickerViewDelegate>
 
-@property (nonatomic) int seconds;
-@property (nonatomic) int minutes;
-@property (nonatomic) int hours;
+@property (nonatomic) NSInteger seconds;
+@property (nonatomic) NSInteger minutes;
+@property (nonatomic) NSInteger hours;
 
--(void)setInterval:(float)interval;
+-(void)setInterval:(CGFloat)interval;
 
 @property (nonatomic, weak) id<TimePickViewDelegate> delegate;
 
