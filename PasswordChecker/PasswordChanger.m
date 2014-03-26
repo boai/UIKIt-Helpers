@@ -73,7 +73,7 @@
             }
             else
             {
-                BlockAlertView *alert = [[BlockAlertView alloc] initWithTitle:NSLocalizedString(@"Passwords do not match", @"")
+                BlockAlertView *alert = [[BlockAlertView alloc] initWithTitle:NSLocalizedString(@"Passwords don't match", @"")
                                                                       message:nil];
                 [alert addButton:NSLocalizedString(@"Ok", @"") withBlock:^(BlockAlertView *alert) {
                     [self enterNewPassword];
