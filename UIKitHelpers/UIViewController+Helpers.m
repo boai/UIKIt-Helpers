@@ -20,4 +20,16 @@
     return result;
 }
 
+-(UIBarButtonItem*)customBarButtonItemWithImageName:(NSString*)imageName action:(SEL)selector
+{
+    UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+    UIImage *image = [UIImage imageNamed:imageName];
+    button.frame = CGRectMake(0, 0, image.size.width, image.size.height);
+    [button setImage:image forState:UIControlStateNormal];
+    
+    [button addTarget:self action:selector forControlEvents:UIControlEventTouchUpInside];
+    
+    return [[UIBarButtonItem alloc] initWithCustomView:button];
+}
+
 @end

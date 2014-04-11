@@ -12,4 +12,6 @@
 
 -(UIViewController*)findTopViewController;
 
+-(UIBarButtonItem*)customBarButtonItemWithImageName:(NSString*)imageName action:(SEL)selector;
+
 @end
