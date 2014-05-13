@@ -11,7 +11,7 @@
 @interface BlockActionSheet : NSObject <UIActionSheetDelegate>
 
 -(id)initWithTitle:(NSString*)title;
--(void)addButton:(NSString*)title withBlock:(void (^)(BlockActionSheet* alert))block;
+-(void)addButton:(NSString*)title withBlock:(void (^)(BlockActionSheet* alert, NSInteger buttonIndex))block;
 
 -(void)showFromTabBar:(UITabBar*)tabbar;
 -(void)showFromToolBar:(UIToolbar*)toolbar;
@@ -22,5 +22,6 @@
 @property (nonatomic) NSInteger cancelButtonIndex;
 @property (nonatomic) NSInteger destructiveButtonIndex;
 @property (nonatomic,readonly) NSInteger numberOfButtons;
+@property (nonatomic,strong,readonly) UIActionSheet *actionSheet;
 
 @end

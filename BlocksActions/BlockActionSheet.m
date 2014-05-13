@@ -10,21 +10,19 @@
 
 @implementation BlockActionSheet
 {
-    UIActionSheet *_actionSheet;
-    
     NSMutableArray *buttonsBlocks;
     
     id context;
 }
 
--(void)addButton:(NSString*)title withBlock:(void (^)(BlockActionSheet* alert))block
+-(void)addButton:(NSString*)title withBlock:(void (^)(BlockActionSheet* alert, NSInteger buttonIndex))block
 {
     [_actionSheet addButtonWithTitle:title];
     if (block)
         [buttonsBlocks addObject:[block copy]];
     else
     {
-        void(^emptyBlock)(BlockActionSheet*) = ^(BlockActionSheet* alert) {};
+        void(^emptyBlock)(BlockActionSheet*, NSInteger buttonIndex) = ^(BlockActionSheet* alert, NSInteger buttonIndex) {};
         [buttonsBlocks addObject:[emptyBlock copy]];
     }
 }
@@ -75,9 +73,9 @@
 
 -(void)actionSheet:(UIActionSheet *)actionSheet didDismissWithButtonIndex:(NSInteger)buttonIndex
 {
-    void(^block)(BlockActionSheet*) = [buttonsBlocks objectAtIndex:buttonIndex];
+    void(^block)(BlockActionSheet*,NSInteger) = [buttonsBlocks objectAtIndex:buttonIndex];
     
-    block(self);
+    block(self,buttonIndex);
     
     context = nil;
     _actionSheet = nil;
