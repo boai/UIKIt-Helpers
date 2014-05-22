@@ -8,23 +8,40 @@
 
 #import "BlockActionSheet.h"
 
+@interface BlockActionSheet ()
+
+@property (nonatomic,copy) void (^cancelButtonBlock)(BlockActionSheet* alert, NSInteger buttonIndex);
+
+@end
+
 @implementation BlockActionSheet
 {
-    NSMutableArray *buttonsBlocks;
+    NSMutableArray *_buttonsBlocks;
     
-    id context;
+    id _context;
 }
 
 -(void)addButton:(NSString*)title withBlock:(void (^)(BlockActionSheet* alert, NSInteger buttonIndex))block
 {
     [_actionSheet addButtonWithTitle:title];
     if (block)
-        [buttonsBlocks addObject:[block copy]];
+        [_buttonsBlocks addObject:[block copy]];
     else
     {
-        void(^emptyBlock)(BlockActionSheet*, NSInteger buttonIndex) = ^(BlockActionSheet* alert, NSInteger buttonIndex) {};
-        [buttonsBlocks addObject:[emptyBlock copy]];
+        [_buttonsBlocks addObject:[self.emptyBlock copy]];
     }
+}
+
+-(void)addCancelButton:(NSString *)title withBlock:(void (^)(BlockActionSheet *, NSInteger))block
+{
+    [_actionSheet addButtonWithTitle:title];
+    if (block)
+        self.cancelButtonBlock = block;
+}
+
+-(void(^)(BlockActionSheet* alert, NSInteger buttonIndex))emptyBlock
+{
+    return ^(BlockActionSheet* alert, NSInteger buttonIndex) {};
 }
 
 -(id)initWithTitle:(NSString *)title
@@ -36,48 +53,56 @@
                                           cancelButtonTitle:nil
                                      destructiveButtonTitle:nil
                                           otherButtonTitles:nil];
-        buttonsBlocks = [[NSMutableArray alloc] init];
+        _buttonsBlocks = [[NSMutableArray alloc] init];
+        self.cancelButtonBlock = self.emptyBlock;
     }
     return self;
 }
 
 -(void)showFromTabBar:(UITabBar*)tabbar
 {
-    context = self;
+    _context = self;
     [_actionSheet showFromTabBar:tabbar];
 }
 
 -(void)showFromToolBar:(UIToolbar*)toolbar
 {
-    context = self;
+    _context = self;
     [_actionSheet showFromToolbar:toolbar];
 }
 
 -(void)showInView:(UIView*)view
 {
-    context = self;
+    _context = self;
     [_actionSheet showInView:view];
 }
 
 -(void)showFromBarButtonItem:(UIBarButtonItem*)barButton animated:(BOOL)animated
 {
-    context = self;
+    _context = self;
     [_actionSheet showFromBarButtonItem:barButton animated:animated];
 }
 
 -(void)showFromRect:(CGRect)rect inView:(UIView *)view animated:(BOOL)animated
 {
-    context = self;
+    _context = self;
     [_actionSheet showFromRect:rect inView:view animated:animated];
 }
 
 -(void)actionSheet:(UIActionSheet *)actionSheet didDismissWithButtonIndex:(NSInteger)buttonIndex
 {
-    void(^block)(BlockActionSheet*,NSInteger) = [buttonsBlocks objectAtIndex:buttonIndex];
+    void(^block)(BlockActionSheet*,NSInteger) = nil;
+    
+    NSInteger blockIndex = buttonIndex;
+    
+    if (blockIndex < 0 || blockIndex >= _buttonsBlocks.count || blockIndex == self.cancelButtonIndex)
+        block = self.cancelButtonBlock;
+    else
+        block = [_buttonsBlocks objectAtIndex:blockIndex];
     
     block(self,buttonIndex);
     
-    context = nil;
+    _context = nil;
     _actionSheet = nil;
 }
 
@@ -86,6 +111,7 @@
 -(void)setCancelButtonIndex:(NSInteger)cancelButtonIndex
 {
     _actionSheet.cancelButtonIndex = cancelButtonIndex;
+    self.cancelButtonBlock = _buttonsBlocks[cancelButtonIndex];
 }
 
 -(NSInteger)cancelButtonIndex
@@ -107,6 +133,5 @@
 {
     return _actionSheet.numberOfButtons;
 }
-
 
 @end

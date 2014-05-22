@@ -12,6 +12,7 @@
 
 -(id)initWithTitle:(NSString*)title;
 -(void)addButton:(NSString*)title withBlock:(void (^)(BlockActionSheet* alert, NSInteger buttonIndex))block;
+-(void)addCancelButton:(NSString*)title withBlock:(void (^)(BlockActionSheet* alert, NSInteger buttonIndex))block;
 
 -(void)showFromTabBar:(UITabBar*)tabbar;
 -(void)showFromToolBar:(UIToolbar*)toolbar;
