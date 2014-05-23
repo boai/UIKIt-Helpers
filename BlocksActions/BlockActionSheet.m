@@ -111,7 +111,6 @@
 -(void)setCancelButtonIndex:(NSInteger)cancelButtonIndex
 {
     _actionSheet.cancelButtonIndex = cancelButtonIndex;
-    self.cancelButtonBlock = _buttonsBlocks[cancelButtonIndex];
 }
 
 -(NSInteger)cancelButtonIndex
