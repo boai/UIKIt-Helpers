@@ -10,6 +10,6 @@
 
 @interface UITableViewCell (Helpers)
 
-+(float)groupedCellWidth:(UIInterfaceOrientation)orientation;
++(CGFloat)groupedCellWidth:(UIInterfaceOrientation)orientation;
 
 @end

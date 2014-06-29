@@ -11,11 +11,11 @@
 @implementation UICloseButton
 
 - (void)drawRect:(CGRect)rect {
-	float radius = MIN(rect.size.width, rect.size.height)/2;
-	float hWidth = CGRectGetMidX(rect);
-	float hHeight = CGRectGetMidY(rect);
-	float outerLineWidth = 1.0f;
-	float x = radius*0.35;
+	CGFloat radius = MIN(rect.size.width, rect.size.height)/2;
+	CGFloat hWidth = CGRectGetMidX(rect);
+	CGFloat hHeight = CGRectGetMidY(rect);
+	CGFloat outerLineWidth = 1.0f;
+	CGFloat x = radius*0.35;
 	
 	CGContextRef c = UIGraphicsGetCurrentContext();
 	

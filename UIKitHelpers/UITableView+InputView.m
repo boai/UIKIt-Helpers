@@ -84,7 +84,7 @@ const void *INPUT_VIEW_IDENTIFER = &INPUT_VIEW_IDENTIFER;
                      }];
 }
 
--(void)keyboardWillShow:(CGRect)keybordFrame duration:(float)duration
+-(void)keyboardWillShow:(CGRect)keybordFrame duration:(CGFloat)duration
 {
     UIView *parent = self.superview;
     if (!parent)
@@ -106,7 +106,7 @@ const void *INPUT_VIEW_IDENTIFER = &INPUT_VIEW_IDENTIFER;
                      }];
 }
 
--(void)keyboardWillHide:(CGRect)keybordFrame duration:(float)duration
+-(void)keyboardWillHide:(CGRect)keybordFrame duration:(CGFloat)duration
 {
     UIView *parent = self.superview;
     if (!parent)
