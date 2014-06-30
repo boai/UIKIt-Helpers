@@ -89,7 +89,7 @@
     return _alertView.cancelButtonIndex;
 }
 
--(UITextField*)textFieldAtIndex:(int)index
+-(UITextField*)textFieldAtIndex:(NSInteger)index
 {
     return [_alertView textFieldAtIndex:index];
 }

@@ -13,7 +13,7 @@
 -(void)addInputView:(UIView*)view completition:(void (^)(void))completition;
 -(void)removeInputViewCompletition:(void (^)(void))completition;
 
--(void)keyboardWillShow:(CGRect)keybordFrame duration:(float)duration;
--(void)keyboardWillHide:(CGRect)keybordFrame duration:(float)duration;
+-(void)keyboardWillShow:(CGRect)keybordFrame duration:(CGFloat)duration;
+-(void)keyboardWillHide:(CGRect)keybordFrame duration:(CGFloat)duration;
 
 @end

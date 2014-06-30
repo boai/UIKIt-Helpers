@@ -163,16 +163,16 @@
 	if (activityView)
 	{
 		UILabel *label = (UILabel*)[centerView viewWithTag:ACTIVITY_MSG];
-		float y = 0;
+		CGFloat y = 0;
 		if (label)
 			y = label.frame.origin.y+label.frame.size.height+10;
 		else
 		{
-			float offset = centerView.bounds.size.height*0.5;
+			CGFloat offset = centerView.bounds.size.height*0.5;
 			y = offset+(offset-button.frame.size.height)*0.5;
 		}
         
-		float x = (centerView.bounds.size.width-button.frame.size.width)*0.5;
+		CGFloat x = (centerView.bounds.size.width-button.frame.size.width)*0.5;
 		CGRect r = button.frame;
 		r.origin = CGPointMake(x, y);
 		button.frame = r;

@@ -10,9 +10,9 @@
 
 @implementation UITableViewCell (Helpers)
 
-+(float)groupedCellWidth:(UIInterfaceOrientation)orientation
++(CGFloat)groupedCellWidth:(UIInterfaceOrientation)orientation
 {
-    float width = 280;
+    CGFloat width = 280;
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
     {
         if (UIInterfaceOrientationIsLandscape(orientation))

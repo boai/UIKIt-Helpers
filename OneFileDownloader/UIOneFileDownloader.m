@@ -91,7 +91,7 @@
 {
     if (request.expectedContentLength>0)
     {
-        float percent = (100.0 * (double)request.downloadedBytes) / (double)request.expectedContentLength;
+        CGFloat percent = (100.0 * (CGFloat)request.downloadedBytes) / (CGFloat)request.expectedContentLength;
         [ActView setMessageForActivityIndicator:
          [NSString stringWithFormat:NSLocalizedString(@"Downloading: %d%%",@""),(int)percent]];
     }
