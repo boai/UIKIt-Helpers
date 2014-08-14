@@ -65,8 +65,10 @@
 
 -(void)dissmissed
 {
-    context = nil;
-    _alertView = nil;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        context = nil;
+        _alertView = nil;
+    });
 }
 
 -(void)didDismissWithButton:(NSInteger)button
