@@ -12,7 +12,7 @@
 
 +(CGFloat)groupedCellWidth:(UIInterfaceOrientation)orientation
 {
-    CGFloat width = 280;
+    CGFloat width = 320;
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
     {
         if (UIInterfaceOrientationIsLandscape(orientation))
@@ -22,7 +22,7 @@
     }
     else if (UIInterfaceOrientationIsLandscape(orientation))
     {
-        width = 440;
+        width = 480;
     }
     return width;
 }
