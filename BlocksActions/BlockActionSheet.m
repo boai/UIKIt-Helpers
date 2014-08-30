@@ -44,6 +44,11 @@
     return ^(BlockActionSheet* alert, NSInteger buttonIndex) {};
 }
 
+-(id)init
+{
+    return [self initWithTitle:nil];
+}
+
 -(id)initWithTitle:(NSString *)title
 {
     if (self = [super init])
