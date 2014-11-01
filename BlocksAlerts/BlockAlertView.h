@@ -20,5 +20,6 @@
 @property (nonatomic) UIAlertViewStyle style;
 @property (nonatomic) NSInteger cancelButtonIndex;
 @property (nonatomic) NSInteger returnButton;
+@property (nonatomic, readonly) NSInteger numberOfButtons;
 
 @end

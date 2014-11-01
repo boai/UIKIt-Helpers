@@ -106,6 +106,11 @@
     return _alertView.alertViewStyle;
 }
 
+-(NSInteger)numberOfButtons
+{
+    return _alertView.numberOfButtons;
+}
+
 #pragma mark - UIAlertViewDelegate
 
 - (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex
