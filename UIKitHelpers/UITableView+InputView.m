@@ -68,7 +68,7 @@ const void *INPUT_VIEW_IDENTIFER = &INPUT_VIEW_IDENTIFER;
     UIView *view = (UIView*)objc_getAssociatedObject(self, INPUT_VIEW_IDENTIFER);
     
     CGRect tableViewFrame = self.frame;
-    tableViewFrame.size.height = parent.frame.size.height;
+    tableViewFrame.size.height = parent.bounds.size.height;
     
     CGRect inputViewFrame = view.frame;
     inputViewFrame.origin.y = self.frame.size.height;
@@ -84,26 +84,32 @@ const void *INPUT_VIEW_IDENTIFER = &INPUT_VIEW_IDENTIFER;
                      }];
 }
 
--(void)keyboardWillShow:(CGRect)keybordFrame duration:(CGFloat)duration
+-(CGRect)keyboardIntersectionFrame:(CGRect)screenRect
+{
+    CGRect keybordFrameLocal = [self.superview convertRect:screenRect fromView:nil];
+    CGRect intersectionFrame = CGRectIntersection(self.superview.bounds, keybordFrameLocal);
+    return intersectionFrame;
+}
+
+-(void)updateTableViewFrameWithKeyboardFrame:(CGRect)keyboardRect
+{
+    CGRect newFrame = self.superview.bounds;
+    newFrame.origin = self.frame.origin;
+    newFrame.size.width = self.frame.size.width;
+    newFrame.size.height = newFrame.size.height - keyboardRect.size.height;
+    
+    self.frame = newFrame;
+}
+
+-(void)keyboardDidShow:(CGRect)keybordFrame
 {
     UIView *parent = self.superview;
     if (!parent)
         return;
-    
-    CGRect keybordFrameLocal = [parent convertRect:keybordFrame fromView:nil];
-    
-    CGRect intersectionFrame = CGRectIntersection(self.frame, keybordFrameLocal);
-    
-    CGRect newFrame = self.frame;
-    newFrame.size.height = parent.frame.size.height - intersectionFrame.size.height;
-    
-    [UIView animateWithDuration:duration
-                     animations:^{
-                         self.frame = newFrame;
-                     } completion:^(BOOL finished) {
-                         if (finished)
-                             [self removeInputView];
-                     }];
+
+    CGRect intersection = [self keyboardIntersectionFrame:keybordFrame];
+    [self updateTableViewFrameWithKeyboardFrame:intersection];
+    [self removeInputView];
 }
 
 -(void)keyboardWillHide:(CGRect)keybordFrame duration:(CGFloat)duration
@@ -112,12 +118,9 @@ const void *INPUT_VIEW_IDENTIFER = &INPUT_VIEW_IDENTIFER;
     if (!parent)
         return;
     
-    CGRect newFrame = self.frame;
-    newFrame.size.height = parent.frame.size.height;
-    
     [UIView animateWithDuration:duration
                      animations:^{
-                         self.frame = newFrame;
+                         [self updateTableViewFrameWithKeyboardFrame:CGRectZero];
                      }];
 }
 
