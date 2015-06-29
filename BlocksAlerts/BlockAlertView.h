@@ -22,4 +22,6 @@
 @property (nonatomic) NSInteger returnButton;
 @property (nonatomic, readonly) NSInteger numberOfButtons;
 
+@property (nonatomic,copy) void (^alertDidShowBlock)(BlockAlertView *alert);
+
 @end

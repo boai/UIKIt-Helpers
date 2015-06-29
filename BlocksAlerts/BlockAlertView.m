@@ -118,6 +118,14 @@
     [self didDismissWithButton:buttonIndex];
 }
 
+-(void)didPresentAlertView:(UIAlertView *)alertView
+{
+    if (self.alertDidShowBlock)
+    {
+        self.alertDidShowBlock(self);
+    }
+}
+
 #pragma mark - UITextFieldDelegate
 
 -(BOOL)textFieldShouldReturn:(UITextField *)textField
