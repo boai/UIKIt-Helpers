@@ -12,6 +12,9 @@
 
 @property (nonatomic,copy) void (^cancelButtonBlock)(BlockActionSheet* alert, NSInteger buttonIndex);
 
+@property (nonatomic,strong) UIActionSheet *actionSheet;
+@property (nonatomic,strong) UIAlertController *alertController;
+
 @end
 
 @implementation BlockActionSheet
@@ -23,20 +26,84 @@
 
 -(void)addButton:(NSString*)title withBlock:(void (^)(BlockActionSheet* alert, NSInteger buttonIndex))block
 {
-    [_actionSheet addButtonWithTitle:title];
-    if (block)
-        [_buttonsBlocks addObject:[block copy]];
+    if ([[UIDevice currentDevice].systemVersion floatValue] < 8.0)
+    {
+        [_actionSheet addButtonWithTitle:title];
+        if (block)
+            [_buttonsBlocks addObject:[block copy]];
+        else
+        {
+            [_buttonsBlocks addObject:[self.emptyBlock copy]];
+        }
+    }
     else
     {
-        [_buttonsBlocks addObject:[self.emptyBlock copy]];
+        typeof(self) __weak weakSelf = self;
+        UIAlertAction *action = [UIAlertAction actionWithTitle:title
+                                                         style:UIAlertActionStyleDefault
+                                                       handler:^(UIAlertAction *action) {
+                                                           [weakSelf performAction:action withBlock:block];
+                                                       }];
+        [_alertController addAction:action];
     }
 }
 
 -(void)addCancelButton:(NSString *)title withBlock:(void (^)(BlockActionSheet *, NSInteger))block
 {
-    [_actionSheet addButtonWithTitle:title];
+    if ([[UIDevice currentDevice].systemVersion floatValue] < 8.0)
+    {
+        NSInteger indx = [_actionSheet addButtonWithTitle:title];
+        _actionSheet.cancelButtonIndex = indx;
+        if (block)
+            self.cancelButtonBlock = block;
+    }
+    else
+    {
+        typeof(self) __weak weakSelf = self;
+        UIAlertAction *action = [UIAlertAction actionWithTitle:title
+                                                         style:UIAlertActionStyleCancel
+                                                       handler:^(UIAlertAction *action) {
+                                                           [weakSelf performAction:action withBlock:block];
+                                                       }];
+        [_alertController addAction:action];
+    }
+}
+
+-(void)addDestructiveButton:(NSString *)title withBlock:(void (^)(BlockActionSheet *, NSInteger))block
+{
+    if ([[UIDevice currentDevice].systemVersion floatValue] < 8.0)
+    {
+        NSInteger indx = [_actionSheet addButtonWithTitle:title];
+        _actionSheet.destructiveButtonIndex = indx;
+        if (block)
+            [_buttonsBlocks addObject:[block copy]];
+        else
+        {
+            [_buttonsBlocks addObject:[self.emptyBlock copy]];
+        }
+    }
+    else
+    {
+        typeof(self) __weak weakSelf = self;
+        UIAlertAction *action = [UIAlertAction actionWithTitle:title
+                                                         style:UIAlertActionStyleDestructive
+                                                       handler:^(UIAlertAction *action) {
+                                                           [weakSelf performAction:action withBlock:block];
+                                                       }];
+        [_alertController addAction:action];
+    }
+}
+
+-(void)performAction:(UIAlertAction *)action withBlock:(void (^)(BlockActionSheet* alert, NSInteger buttonIndex))block
+{
     if (block)
-        self.cancelButtonBlock = block;
+    {
+        block(self,[_alertController.actions indexOfObject:action]);
+    }
+    _alertController = nil;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        _context = nil;
+    });
 }
 
 -(void(^)(BlockActionSheet* alert, NSInteger buttonIndex))emptyBlock
@@ -49,17 +116,24 @@
     return [self initWithTitle:nil];
 }
 
--(id)initWithTitle:(NSString *)title
+-(instancetype)initWithTitle:(NSString *)title
 {
     if (self = [super init])
     {
-        _actionSheet = [[UIActionSheet alloc] initWithTitle:title
-                                                   delegate:self
-                                          cancelButtonTitle:nil
-                                     destructiveButtonTitle:nil
-                                          otherButtonTitles:nil];
-        _buttonsBlocks = [[NSMutableArray alloc] init];
-        self.cancelButtonBlock = self.emptyBlock;
+        if ([[UIDevice currentDevice].systemVersion floatValue] < 8.0)
+        {
+            _actionSheet = [[UIActionSheet alloc] initWithTitle:title
+                                                       delegate:self
+                                              cancelButtonTitle:nil
+                                         destructiveButtonTitle:nil
+                                              otherButtonTitles:nil];
+            _buttonsBlocks = [[NSMutableArray alloc] init];
+            self.cancelButtonBlock = self.emptyBlock;
+        }
+        else
+        {
+            _alertController = [UIAlertController alertControllerWithTitle:title message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+        }
     }
     return self;
 }
@@ -67,31 +141,101 @@
 -(void)showFromTabBar:(UITabBar*)tabbar
 {
     _context = self;
-    [_actionSheet showFromTabBar:tabbar];
+    if ([[UIDevice currentDevice].systemVersion floatValue] < 8.0)
+    {
+        [_actionSheet showFromTabBar:tabbar];
+    }
+    else
+    {
+        _alertController.popoverPresentationController.sourceRect = tabbar.bounds;
+        [self present];
+    }
 }
 
 -(void)showFromToolBar:(UIToolbar*)toolbar
 {
     _context = self;
-    [_actionSheet showFromToolbar:toolbar];
+    if ([[UIDevice currentDevice].systemVersion floatValue] < 8.0)
+    {
+        [_actionSheet showFromToolbar:toolbar];
+    }
+    else
+    {
+        _alertController.popoverPresentationController.sourceRect = toolbar.bounds;
+        [self present];
+    }
 }
 
 -(void)showInView:(UIView*)view
 {
     _context = self;
-    [_actionSheet showInView:view];
+    if ([[UIDevice currentDevice].systemVersion floatValue] < 8.0)
+    {
+        [_actionSheet showInView:view];
+    }
+    else
+    {
+        _alertController.popoverPresentationController.sourceView = view;
+        [self present];
+    }
 }
 
 -(void)showFromBarButtonItem:(UIBarButtonItem*)barButton animated:(BOOL)animated
 {
     _context = self;
-    [_actionSheet showFromBarButtonItem:barButton animated:animated];
+    if ([[UIDevice currentDevice].systemVersion floatValue] < 8.0)
+    {
+        [_actionSheet showFromBarButtonItem:barButton animated:animated];
+    }
+    else
+    {
+        _alertController.popoverPresentationController.barButtonItem = barButton;
+        [self present];
+    }
 }
 
 -(void)showFromRect:(CGRect)rect inView:(UIView *)view animated:(BOOL)animated
 {
     _context = self;
-    [_actionSheet showFromRect:rect inView:view animated:animated];
+    if ([[UIDevice currentDevice].systemVersion floatValue] < 8.0)
+    {
+        [_actionSheet showFromRect:rect inView:view animated:animated];
+    }
+    else
+    {
+        _alertController.popoverPresentationController.sourceRect = rect;
+        _alertController.popoverPresentationController.sourceView = view;
+        [self present];
+    }
+}
+
+- (UIViewController *) getRootController
+{
+    NSMutableArray *windows = [[UIApplication sharedApplication].windows mutableCopy];
+    
+    UIWindow *window = windows.lastObject;
+    UIViewController *rootController = nil;
+    
+    while (window && rootController == nil) {
+        rootController = window.rootViewController;
+        if (rootController == nil)
+        {
+            [windows removeLastObject];
+            window = windows.lastObject;
+        }
+    }
+    
+    
+    return rootController;
+}
+
+-(void)present
+{
+    UIViewController *rootController = [self getRootController];
+    
+    [rootController presentViewController:_alertController
+                                 animated:YES
+                               completion:nil];
 }
 
 -(void)actionSheet:(UIActionSheet *)actionSheet didDismissWithButtonIndex:(NSInteger)buttonIndex
@@ -107,8 +251,10 @@
     
     block(self,buttonIndex);
     
-    _context = nil;
     _actionSheet = nil;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        _context = nil;
+    });
 }
 
 #pragma mark - Properties
@@ -135,7 +281,12 @@
 
 -(NSInteger)numberOfButtons
 {
-    return _actionSheet.numberOfButtons;
+    if ([[UIDevice currentDevice].systemVersion floatValue] < 8.0)
+        return _actionSheet.numberOfButtons;
+    else
+    {
+        return _alertController.actions.count;
+    }
 }
 
 @end
