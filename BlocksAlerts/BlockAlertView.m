@@ -15,6 +15,8 @@ typedef enum : NSUInteger {
 
 @interface BlockAlertView () <UIAlertViewDelegate,UITextFieldDelegate>
 
+@property (nonatomic) BOOL forceOldVersion;
+
 @end
 
 @implementation BlockAlertView
@@ -89,17 +91,28 @@ typedef enum : NSUInteger {
     }];
 }
 
+-(instancetype)initWithTitle:(NSString *)title message:(NSString *)message forceOldStyle:(BOOL)forceOldStyle
+{
+    return [self initWithTitle:title message:message style:BlockAlertViewStyleDefault forceOldStyle:forceOldStyle];
+}
+
 -(instancetype)initWithTitle:(NSString *)title message:(NSString *)message
 {
-    return [self initIOS8WithTitle:title message:message style:BlockAlertViewStyleDefault];
+    return [self initWithTitle:title message:message style:BlockAlertViewStyleDefault forceOldStyle:NO];
 }
 
 -(instancetype)initWithTitle:(NSString*)title message:(NSString*)message style:(BlockAlertViewStyle)style
 {
+    return [self initWithTitle:title message:message style:style forceOldStyle:NO];
+}
+
+-(instancetype)initWithTitle:(NSString*)title message:(NSString*)message style:(BlockAlertViewStyle)style forceOldStyle:(BOOL)forceOldStyle
+{
     if (self = [self init])
     {
+        _forceOldVersion = forceOldStyle;
         _style = style;
-        if ([[UIDevice currentDevice].systemVersion floatValue] < 8.0)
+        if (self.useOldInterface)
         {
             _alertView = [[UIAlertView alloc] initWithTitle:title
                                                     message:message
@@ -118,6 +131,11 @@ typedef enum : NSUInteger {
     return self;
 }
 
+-(BOOL)useOldInterface
+{
+    return self.forceOldVersion || [[UIDevice currentDevice].systemVersion floatValue] < 8.0;
+}
+
 -(void)addButton:(NSString*)title withBlock:(void (^)(BlockAlertView*))block
 {
     [self addButton:title buttonType:BlockAlertViewButtonTypeDefault withBlock:block];
@@ -130,7 +148,7 @@ typedef enum : NSUInteger {
 
 -(void)addButton:(NSString *)title buttonType:(BlockAlertViewButtonType)type withBlock:(void (^)(BlockAlertView *))block
 {
-    if ([[UIDevice currentDevice].systemVersion floatValue] < 8.0)
+    if (self.useOldInterface)
     {
         NSInteger indx = [_alertView addButtonWithTitle:title];
         
@@ -168,7 +186,7 @@ typedef enum : NSUInteger {
 {
     context = self;
     
-    if ([[UIDevice currentDevice].systemVersion floatValue] < 8.0)
+    if (self.useOldInterface)
     {
         if (_alertView.alertViewStyle!=UIAlertViewStyleDefault && _alertView.alertViewStyle!=UIAlertViewStylePlainTextInput)
         {
@@ -238,7 +256,7 @@ typedef enum : NSUInteger {
 
 -(void)dissmissed
 {
-    if ([[UIDevice currentDevice].systemVersion floatValue] < 8.0)
+    if (self.useOldInterface)
     {
         _alertView = nil;
     }
@@ -263,7 +281,7 @@ typedef enum : NSUInteger {
 
 -(UITextField*)textFieldAtIndex:(NSInteger)index
 {
-    if ([[UIDevice currentDevice].systemVersion floatValue] < 8.0)
+    if (self.useOldInterface)
     {
         return [_alertView textFieldAtIndex:index];
     }
@@ -275,7 +293,7 @@ typedef enum : NSUInteger {
 
 -(NSInteger)numberOfButtons
 {
-    if ([[UIDevice currentDevice].systemVersion floatValue] < 8.0)
+    if (self.useOldInterface)
     {
         return _alertView.numberOfButtons;
     }
@@ -324,7 +342,7 @@ typedef enum : NSUInteger {
         
         if (shouldDissmiss)
         {
-            if ([[UIDevice currentDevice].systemVersion floatValue] < 8.0)
+            if (self.useOldInterface)
             {
                 [_alertView dismissWithClickedButtonIndex:-10 animated:YES];
             }

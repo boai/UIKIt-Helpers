@@ -16,7 +16,7 @@ typedef NS_ENUM(NSInteger, BlockAlertViewStyle) {
 };
 
 @interface BlockAlertView : NSObject 
-
+-(instancetype)initWithTitle:(NSString*)title message:(NSString*)message forceOldStyle:(BOOL)forceOldStyle;
 -(instancetype)initWithTitle:(NSString*)title message:(NSString*)message;
 -(instancetype)initWithTitle:(NSString*)title message:(NSString*)message style:(BlockAlertViewStyle)style;
 -(void)addButton:(NSString*)title withBlock:(void (^)(BlockAlertView* alert))block;
