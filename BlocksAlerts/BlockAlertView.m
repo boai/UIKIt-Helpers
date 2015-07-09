@@ -188,33 +188,47 @@ typedef enum : NSUInteger {
     }
 }
 
-- (UIViewController *) getRootController
+-(UIViewController *)getRootController
 {
-    NSMutableArray *windows = [[UIApplication sharedApplication].windows mutableCopy];
-    
-    UIWindow *window = windows.lastObject;
-    UIViewController *rootController = nil;
-    
-    while (window && rootController == nil) {
-        rootController = window.rootViewController;
-        if (rootController == nil)
-        {
-            [windows removeLastObject];
-            window = windows.lastObject;
+    UIWindow *window = [[UIApplication sharedApplication] keyWindow];
+    if (window.windowLevel != UIWindowLevelNormal) {
+        NSArray *windows = [[UIApplication sharedApplication] windows];
+        for(window in windows) {
+            if (window.windowLevel == UIWindowLevelNormal) {
+                break;
+            }
         }
     }
     
-    return rootController;
+    for (UIView *subView in [window subviews])
+    {
+        UIResponder *responder = [subView nextResponder];
+        if([responder isKindOfClass:[UIViewController class]]) {
+            return [self topMostViewController: (UIViewController *) responder];
+        }
+    }
+    
+    return nil;
+}
+
+- (UIViewController *) topMostViewController: (UIViewController *) controller {
+    BOOL isPresenting = NO;
+    do {
+        // this path is called only on iOS 6+, so -presentedViewController is fine here.
+        UIViewController *presented = [controller presentedViewController];
+        isPresenting = presented != nil;
+        if(presented != nil) {
+            controller = presented;
+        }
+        
+    } while (isPresenting);
+    
+    return controller;
 }
 
 -(void)present
 {
-    UIViewController *rootController = [UIApplication sharedApplication].keyWindow.rootViewController;
-    if (rootController == nil)
-    {
-        rootController = [self getRootController];
-    }
-    
+    UIViewController *rootController = [self getRootController];
     [rootController presentViewController:_alertController
                                  animated:YES
                                completion:^{
