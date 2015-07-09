@@ -8,7 +8,7 @@
 
 #import "BlockActionSheet.h"
 
-@interface BlockActionSheet ()
+@interface BlockActionSheet () <UIPopoverPresentationControllerDelegate>
 
 @property (nonatomic,copy) void (^cancelButtonBlock)(BlockActionSheet* alert, NSInteger buttonIndex);
 
@@ -101,9 +101,6 @@
         block(self,[_alertController.actions indexOfObject:action]);
     }
     _alertController = nil;
-    dispatch_async(dispatch_get_main_queue(), ^{
-        _context = nil;
-    });
 }
 
 -(void(^)(BlockActionSheet* alert, NSInteger buttonIndex))emptyBlock
@@ -111,7 +108,7 @@
     return ^(BlockActionSheet* alert, NSInteger buttonIndex) {};
 }
 
--(id)init
+-(instancetype)init
 {
     return [self initWithTitle:nil];
 }
@@ -133,6 +130,7 @@
         else
         {
             _alertController = [UIAlertController alertControllerWithTitle:title message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+            _alertController.popoverPresentationController.delegate = self;
         }
     }
     return self;
@@ -176,6 +174,8 @@
     else
     {
         _alertController.popoverPresentationController.sourceView = view;
+        _alertController.popoverPresentationController.sourceRect = view.bounds;
+        
         [self present];
     }
 }
@@ -289,4 +289,16 @@
     }
 }
 
+-(void)popoverPresentationController:(UIPopoverPresentationController *)popoverPresentationController willRepositionPopoverToRect:(inout CGRect *)rect inView:(inout UIView *__autoreleasing *)view
+{
+//    *rect = [(*view).superview convertRect:*rect toView:*view];
+}
+
+
+-(void)popoverPresentationControllerDidDismissPopover:(UIPopoverPresentationController *)popoverPresentationController
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        _context = nil;
+    });
+}
 @end
