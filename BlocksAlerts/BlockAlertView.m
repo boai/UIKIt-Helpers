@@ -247,6 +247,11 @@ typedef enum : NSUInteger {
 -(void)present
 {
     UIViewController *rootController = [self getRootController];
+    if (rootController == nil)
+    {
+        rootController = [UIApplication sharedApplication].keyWindow.rootViewController;
+        rootController = [self topMostViewController:rootController];
+    }
     [rootController presentViewController:_alertController
                                  animated:YES
                                completion:^{
