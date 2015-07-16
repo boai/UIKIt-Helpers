@@ -112,12 +112,22 @@
 {
     return [self initWithTitle:nil];
 }
+-(void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+-(BOOL)oldStyle
+{
+    return [[UIDevice currentDevice].systemVersion floatValue] < 8.0;
+}
 
 -(instancetype)initWithTitle:(NSString *)title
 {
     if (self = [super init])
     {
-        if ([[UIDevice currentDevice].systemVersion floatValue] < 8.0)
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(dismiss) name:UIApplicationWillChangeStatusBarOrientationNotification object:nil];
+        if (self.oldStyle)
         {
             _actionSheet = [[UIActionSheet alloc] initWithTitle:title
                                                        delegate:self
@@ -131,6 +141,7 @@
         {
             _alertController = [UIAlertController alertControllerWithTitle:title message:nil preferredStyle:UIAlertControllerStyleActionSheet];
             _alertController.popoverPresentationController.delegate = self;
+            
         }
     }
     return self;
@@ -139,7 +150,7 @@
 -(void)showFromTabBar:(UITabBar*)tabbar
 {
     _context = self;
-    if ([[UIDevice currentDevice].systemVersion floatValue] < 8.0)
+    if (self.oldStyle)
     {
         [_actionSheet showFromTabBar:tabbar];
     }
@@ -153,7 +164,7 @@
 -(void)showFromToolBar:(UIToolbar*)toolbar
 {
     _context = self;
-    if ([[UIDevice currentDevice].systemVersion floatValue] < 8.0)
+    if (self.oldStyle)
     {
         [_actionSheet showFromToolbar:toolbar];
     }
@@ -167,7 +178,7 @@
 -(void)showInView:(UIView*)view
 {
     _context = self;
-    if ([[UIDevice currentDevice].systemVersion floatValue] < 8.0)
+    if (self.oldStyle)
     {
         [_actionSheet showInView:view];
     }
@@ -183,7 +194,7 @@
 -(void)showFromBarButtonItem:(UIBarButtonItem*)barButton animated:(BOOL)animated
 {
     _context = self;
-    if ([[UIDevice currentDevice].systemVersion floatValue] < 8.0)
+    if (self.oldStyle)
     {
         [_actionSheet showFromBarButtonItem:barButton animated:animated];
     }
@@ -197,7 +208,7 @@
 -(void)showFromRect:(CGRect)rect inView:(UIView *)view animated:(BOOL)animated
 {
     _context = self;
-    if ([[UIDevice currentDevice].systemVersion floatValue] < 8.0)
+    if (self.oldStyle)
     {
         [_actionSheet showFromRect:rect inView:view animated:animated];
     }
@@ -224,7 +235,6 @@
             window = windows.lastObject;
         }
     }
-    
     
     return rootController;
 }
@@ -257,6 +267,18 @@
     });
 }
 
+-(void)dismiss
+{
+    if (self.oldStyle)
+    {
+        [_actionSheet dismissWithClickedButtonIndex:-1 animated:YES];
+    }
+    else
+    {
+        [_alertController dismissViewControllerAnimated:YES completion:nil];
+    }
+}
+
 #pragma mark - Properties
 
 -(void)setCancelButtonIndex:(NSInteger)cancelButtonIndex
@@ -281,19 +303,13 @@
 
 -(NSInteger)numberOfButtons
 {
-    if ([[UIDevice currentDevice].systemVersion floatValue] < 8.0)
+    if (self.oldStyle)
         return _actionSheet.numberOfButtons;
     else
     {
         return _alertController.actions.count;
     }
 }
-
--(void)popoverPresentationController:(UIPopoverPresentationController *)popoverPresentationController willRepositionPopoverToRect:(inout CGRect *)rect inView:(inout UIView *__autoreleasing *)view
-{
-//    *rect = [(*view).superview convertRect:*rect toView:*view];
-}
-
 
 -(void)popoverPresentationControllerDidDismissPopover:(UIPopoverPresentationController *)popoverPresentationController
 {
