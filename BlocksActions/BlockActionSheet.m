@@ -239,9 +239,30 @@
     return rootController;
 }
 
+- (UIViewController *) topMostViewController: (UIViewController *) controller {
+    BOOL isPresenting = NO;
+    do {
+        // this path is called only on iOS 6+, so -presentedViewController is fine here.
+        UIViewController *presented = [controller presentedViewController];
+        isPresenting = presented != nil;
+        if(presented != nil) {
+            controller = presented;
+        }
+        
+    } while (isPresenting);
+    
+    return controller;
+}
+
 -(void)present
 {
-    UIViewController *rootController = [self getRootController];
+    UIViewController *rootController = [UIApplication sharedApplication].keyWindow.rootViewController;
+    rootController = [self topMostViewController:rootController];
+    
+    if (rootController == nil)
+    {
+        rootController = [self getRootController];
+    }
     
     [rootController presentViewController:_alertController
                                  animated:YES
