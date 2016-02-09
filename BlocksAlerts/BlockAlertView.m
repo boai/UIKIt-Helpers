@@ -350,10 +350,20 @@ typedef enum : NSUInteger {
             if (self.useOldInterface)
             {
                 [_alertView dismissWithClickedButtonIndex:-10 animated:YES];
+                if (self.alertDismissOnTextFieldReturnBlock)
+                {
+                    self.alertDismissOnTextFieldReturnBlock(self,textField);
+                }
             }
             else
             {
-                [_alertController dismissViewControllerAnimated:YES completion:NO];
+                __weak typeof(self) weakSelf = self;
+                [_alertController dismissViewControllerAnimated:YES completion:^{
+                    if (weakSelf.alertDismissOnTextFieldReturnBlock)
+                    {
+                        weakSelf.alertDismissOnTextFieldReturnBlock(self,textField);
+                    }
+                }];
             }
         }
     }

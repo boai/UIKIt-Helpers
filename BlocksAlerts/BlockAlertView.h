@@ -31,4 +31,6 @@ typedef NS_ENUM(NSInteger, BlockAlertViewStyle) {
 @property (nonatomic,copy) void (^alertDidShowBlock)(BlockAlertView *alert);
 @property (nonatomic,copy) BOOL (^alertShouldDismissOnTextFieldReturnWithCompletionBlock)(BlockAlertView *alert,UITextField *textField);
 
+@property (nonatomic,copy) void (^alertDismissOnTextFieldReturnBlock)(BlockAlertView *alert,UITextField *textField);
+
 @end
