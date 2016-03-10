@@ -49,14 +49,12 @@
 
 -(void)passwordAlertView:(NSString*)title okBlock:(void(^)(BlockAlertView* alert))okBlock
 {
-    BlockAlertView *passwordAlertView = [[BlockAlertView alloc] initWithTitle:title message:nil];
-    passwordAlertView.style = UIAlertViewStyleSecureTextInput;
-    [passwordAlertView addButton:NSLocalizedString(@"Cancel", @"") withBlock:^(BlockAlertView *alert) {
+    BlockAlertView *passwordAlertView = [[BlockAlertView alloc] initWithTitle:title message:nil style:BlockAlertViewStyleSecureTextInput];
+    [passwordAlertView addButton:NSLocalizedString(@"Ok", @"") withBlock:okBlock];
+    [passwordAlertView addCancelButton:NSLocalizedString(@"Cancel", @"") withBlock:^(BlockAlertView *alert) {
         completeBlock(nil,YES);
         context = nil;
     }];
-    [passwordAlertView addButton:NSLocalizedString(@"Ok", @"") withBlock:okBlock];
-    passwordAlertView.cancelButtonIndex = 0;
     [passwordAlertView show];
 }
 

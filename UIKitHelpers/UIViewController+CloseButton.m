@@ -18,7 +18,7 @@
 -(void)addCloseButtonWithTitle:(NSString*)title
 {
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:title
-                                                                             style:UIBarButtonItemStyleBordered
+                                                                             style:UIBarButtonItemStylePlain
                                                                             target:self
                                                                             action:@selector(closeClick)];
 }

@@ -28,12 +28,8 @@
 {
     context = self;
     
-    BlockAlertView *alertView = [[BlockAlertView alloc] initWithTitle:self.title message:nil];
-    alertView.style = UIAlertViewStyleSecureTextInput;
-    [alertView addButton:NSLocalizedString(@"Cancel", @"") withBlock:^(BlockAlertView *alert) {
-        checkerHandler(nil,YES);
-        context = nil;
-    }];
+    BlockAlertView *alertView = [[BlockAlertView alloc] initWithTitle:self.title message:nil style:BlockAlertViewStyleSecureTextInput];
+    
     [alertView addButton:NSLocalizedString(@"Ok", @"") withBlock:^(BlockAlertView *alert) {
         if (!checkerHandler([alert textFieldAtIndex:0].text,NO))
         {
@@ -47,7 +43,12 @@
         else
             context = nil;
     }];
-    alertView.cancelButtonIndex = 0;
+
+    [alertView addCancelButton:NSLocalizedString(@"Cancel", @"") withBlock:^(BlockAlertView *alert) {
+        checkerHandler(nil,YES);
+        context = nil;
+    }];
+    
     [alertView show];
 }
 
