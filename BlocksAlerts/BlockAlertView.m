@@ -246,17 +246,19 @@ typedef enum : NSUInteger {
 
 -(void)present
 {
-    UIViewController *rootController = [self getRootController];
-    if (rootController == nil)
-    {
-        rootController = [UIApplication sharedApplication].keyWindow.rootViewController;
-        rootController = [self topMostViewController:rootController];
-    }
-    [rootController presentViewController:_alertController
-                                 animated:YES
-                               completion:^{
-                                   [self didPresent];
-                               }];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        UIViewController *rootController = [self getRootController];
+        if (rootController == nil)
+        {
+            rootController = [UIApplication sharedApplication].keyWindow.rootViewController;
+            rootController = [self topMostViewController:rootController];
+        }
+        [rootController presentViewController:_alertController
+                                     animated:YES
+                                   completion:^{
+                                       [self didPresent];
+                                   }];
+    });
 }
 
 -(void)dissmissed
